@@ -5,6 +5,7 @@ import "./App.css";
 import RegistrationForm from "./Pages/RegistrationForm";
 import SignInForm from "./Pages/SignInForm";
 import { Route, Routes } from "react-router-dom";
+import Dashboard from "./Dashboard/Dashboard";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -13,8 +14,9 @@ function App() {
     <>
       <h1 className="bg-[#e1edff] h-screen flex justify-center items-center">
         <Routes>
-          <Route path="" element={<RegistrationForm />} />
+          <Route path="signUp" element={<RegistrationForm />} />
           <Route path="signIn" element={<SignInForm />} />
+          <Route path="" element={<Dashboard />} />
         </Routes>
       </h1>
     </>
