@@ -1,6 +1,7 @@
 import React from "react";
 import Avatar from "/image.png";
 import { FcVideoCall } from "react-icons/fc";
+import { FiSend } from "react-icons/fi";
 
 const Dashboard = () => {
   const Contact = [
@@ -63,7 +64,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="w-[65%] bg-white h-screen  flex flex-col items-center ">
+      <div className="w-[75%] bg-white h-screen  flex flex-col items-center ">
         <div className="w-[100%] md:w-[75%] rounded-full flex item-center bg-secondary mt-11">
           <div className="w-[30%] h-[20%] md:w-[10%] md:ml-10 cursor-pointer">
             <img src={Avatar} alt="" />
@@ -96,6 +97,15 @@ const Dashboard = () => {
             <div className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl ml-auto text-white p-4">
               <p>hahah sai ho kei vako nai xaina k kna ho rw.</p>
             </div>
+          </div>
+        </div>
+        <div className="md:p-14 w-full flex items-center">
+          <input
+            placeholder="Type a message"
+            className="md:w-[70%]  border-0 p-3 shadow-mg rounded-full bg-light focus:ring-0"
+          />
+          <div className=" ml-3 md:ml-[90px] text-blue-600 cursor-pointer">
+            <FiSend size={25} />
           </div>
         </div>
       </div>
