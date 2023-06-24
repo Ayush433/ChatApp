@@ -22,7 +22,7 @@ const Dashboard = () => {
   ];
   return (
     <div className="w-screen flex ">
-      <div className="w-[25%] border border-black h-screen bg-secondary">
+      <div className="w-[25%] h-screen bg-secondary">
         <div className=" flex items-center my-8 flex-col md:flex-row">
           <img
             className="w-[75%] h-[20%] md:w-[20%] md:h-[20%] md:flex-row md:ml-[40px]"
@@ -63,7 +63,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="w-[50%] bg-white h-screen  flex flex-col items-center ">
+      <div className="w-[65%] bg-white h-screen  flex flex-col items-center ">
         <div className="w-[100%] md:w-[75%] rounded-full flex item-center bg-secondary mt-11">
           <div className="w-[30%] h-[20%] md:w-[10%] md:ml-10 cursor-pointer">
             <img src={Avatar} alt="" />
