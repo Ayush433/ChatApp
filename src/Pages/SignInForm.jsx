@@ -1,8 +1,26 @@
 import { useFormik } from "formik";
 import React from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { userSignInAction } from "../Redux/Actions/userActions";
 
 const SignInForm = () => {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+  const { isAuthenticated, isLoading, userInfo } = useSelector(
+    (state) => state.signIn
+  );
+  useEffect(() => {
+    if (isAuthenticated) {
+      nav("/");
+    } else {
+      nav("/signIn");
+    }
+
+    // nav("/");
+  }, [isAuthenticated]);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -13,7 +31,9 @@ const SignInForm = () => {
       password: Yup.string().required("Required"),
     }),
     onSubmit: (values, actions) => {
+      dispatch(userSignInAction(values));
       console.log(values);
+      actions.resetForm();
     },
   });
   return (

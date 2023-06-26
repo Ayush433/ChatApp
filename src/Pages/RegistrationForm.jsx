@@ -8,8 +8,6 @@ const RegistrationForm = () => {
       fullName: "",
       email: "",
       password: "",
-      confirmPassword: "",
-      role: "",
     },
     validationSchema: Yup.object({
       fullName: Yup.string().required("Required"),
@@ -17,9 +15,9 @@ const RegistrationForm = () => {
       password: Yup.string()
         .min(8, "Password must be at least 8 characters")
         .required("Required"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Passwords must match")
-        .required("Required"),
+      // confirmPassword: Yup.string()
+      //   .oneOf([Yup.ref("password"), null], "Passwords must match")
+      //   .required("Required"),
     }),
     onSubmit: (values, actions) => {
       console.log(values);
