@@ -4,16 +4,27 @@ import { FcVideoCall } from "react-icons/fc";
 import { FiSend } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchConversations } from "../Redux/Actions/messageAction";
+import {
+  fetchConversations,
+  fetchMessages,
+} from "../Redux/Actions/messageAction";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.signIn);
   const conversations = useSelector((state) => state.message.conversations);
 
+  console.log("con", conversations);
+  const messages = useSelector((state) => state.message.messages);
+  console.log("messages", messages);
+
   useEffect(() => {
     dispatch(fetchConversations(userInfo?.data?.id));
   }, [dispatch, userInfo]);
+
+  const handleUserClick = (conversationId) => {
+    dispatch(fetchMessages(conversationId));
+  };
 
   return (
     <div className="w-screen flex">
@@ -40,7 +51,10 @@ const Dashboard = () => {
             conversations.map((conversation) => (
               <div key={conversation.conversationId}>
                 <div className="flex items-center my-8 mr-7 border-b border-b-gray-300">
-                  <div className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]">
+                  <div
+                    className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]"
+                    onClick={() => handleUserClick(conversation.conversationId)}
+                  >
                     <img
                       className="w-[65%] h-[30%] md:w-[20%] md:h-[30%]"
                       src={Avatar} // Replace with actual image source
@@ -62,15 +76,15 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="w-[75%] bg-white h-screen  flex flex-col items-center ">
-        <div className="w-[100%] md:w-[75%] rounded-full flex item-center bg-secondary mt-11">
+        <div className="w-[100%] md:w-[62%] md:mb-8 rounded-full flex item-center bg-secondary mt-11">
           <div className="w-[30%] h-[20%] md:w-[10%] md:ml-10 cursor-pointer">
             <img src={Avatar} alt="" />
           </div>
           <div className="ml-3 md:ml-6">
             <h3 className="text-sm mt-2 md:text-lg">
-              {userInfo?.data?.fullName}
+              {conversations[0]?.user?.fullName}
             </h3>
-            <p className="text-sm font-light text-gray-600">Online</p>
+            <p className="text-sm font-light text-green-600">Online</p>
           </div>
           <div className="ml-[40px] mt-4 pr-5 md:ml-[300px] cursor-pointer">
             <FcVideoCall size={30} />
@@ -78,24 +92,27 @@ const Dashboard = () => {
         </div>
         <div className="h-[75%] border w-full overflow-y-auto">
           <div className="h-[1000px] md:px-10 py-14 px-2 overflow-hidden">
-            <div className="w-[200px] md:w-[300px] md:h-[80px] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-4">
-              <p>malai baal nai xaina .</p>
-            </div>
-            <div className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl ml-auto text-white p-4">
-              <p>hahah sai ho kei vako nai xaina k kna ho rw.</p>
-            </div>
-            <div className="w-[200px] md:w-[300px] md:h-[80px] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-4">
-              <p>malai baal nai xaina .</p>
-            </div>
-            <div className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl ml-auto text-white p-4">
-              <p>hahah sai ho kei vako nai xaina k kna ho rw.</p>
-            </div>
-            <div className="w-[200px] md:w-[300px] md:h-[80px] bg-secondary rounded-b-xl rounded-tr-xl p-4 mb-4">
-              <p>malai baal nai xaina .</p>
-            </div>
-            <div className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl ml-auto text-white p-4">
-              <p>hahah sai ho kei vako nai xaina k kna ho rw.</p>
-            </div>
+            {messages.length ? (
+              messages.map(({ message, user: { id } = {} } = {}) => {
+                if (id === userInfo?.data?.id) {
+                  return (
+                    <div className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl p-4 mb-4">
+                      <p className="text-white">{message}</p>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="w-[200px] md:w-[300px] md:h-[80px] bg-secondary rounded-b-xl rounded-tr-xl ml-auto text-white p-4">
+                      <p className="text-black">{message}</p>
+                    </div>
+                  );
+                }
+              })
+            ) : (
+              <div className="text-center text-lg font-semibold">
+                No Message
+              </div>
+            )}
           </div>
         </div>
         <div className="md:p-14 w-full flex items-center">

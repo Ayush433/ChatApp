@@ -10,6 +10,7 @@ import {
 const initialState = {
   conversations: [],
   messages: [],
+  selectedConversationId: null,
   loadingConversations: false,
   loadingMessages: false,
   error: null,
@@ -44,7 +45,7 @@ const messageReducer = (state = initialState, action) => {
     case FETCH_MESSAGES_SUCCESS:
       return {
         ...state,
-        loadingMessages: false,
+        selectedConversationId: action.payload.conversationId,
         messages: action.payload,
       };
     case FETCH_MESSAGES_FAILURE:

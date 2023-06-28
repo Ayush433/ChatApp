@@ -39,12 +39,16 @@ export const fetchMessages = (conversationId) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_MESSAGES_REQUEST });
 
-    const res = await fetch(`/api/message/${conversationId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    // Example API call using fetch
+    const res = await fetch(
+      `http://localhost:4000/api/message/${conversationId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const data = await res.json();
 
