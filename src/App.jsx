@@ -27,7 +27,7 @@ function App() {
       <h1 className="bg-[#e1edff] h-screen flex justify-center items-center">
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="signUp" element={<RegistrationForm />} />
+          <Route path="/signUp" element={<RegistrationForm />} />
           <Route path="signIn" element={<SignInForm />} />
         </Routes>
       </h1>

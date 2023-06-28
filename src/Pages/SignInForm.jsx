@@ -32,13 +32,12 @@ const SignInForm = () => {
     }),
     onSubmit: (values, actions) => {
       dispatch(userSignInAction(values));
-      console.log(values);
       actions.resetForm();
     },
   });
   return (
     <div>
-      <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div class="flex min-h-full flex-col justify-center px-10 py-12 lg:px-8 shadow-lg">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
@@ -118,12 +117,12 @@ const SignInForm = () => {
           </form>
 
           <p class="mt-10 text-center text-sm text-gray-500">
-            Not a member?
+            Dont have account?
             <a
-              href="#"
+              href="signUp"
               class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
-              Start a 14 day free trial
+              SignUp
             </a>
           </p>
         </div>

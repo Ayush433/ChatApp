@@ -1,13 +1,20 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { userSignUpAction } from "../Redux/Actions/userActions";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 const RegistrationForm = () => {
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+  const { userInfo } = useSelector((state) => state.signUp);
   const formik = useFormik({
     initialValues: {
       fullName: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: Yup.object({
       fullName: Yup.string().required("Required"),
@@ -15,12 +22,13 @@ const RegistrationForm = () => {
       password: Yup.string()
         .min(8, "Password must be at least 8 characters")
         .required("Required"),
-      // confirmPassword: Yup.string()
-      //   .oneOf([Yup.ref("password"), null], "Passwords must match")
-      //   .required("Required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Required"),
     }),
     onSubmit: (values, actions) => {
-      console.log(values);
+      dispatch(userSignUpAction(values));
+      nav("/login");
       actions.resetForm();
     },
   });
@@ -130,7 +138,7 @@ const RegistrationForm = () => {
             Already have an account?
             <a
               class="no-underline border-b border-blue text-blue-700"
-              href="/signIn"
+              href="signIn"
             >
               Sign In
             </a>
