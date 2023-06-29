@@ -8,11 +8,17 @@ import {
   fetchConversations,
   fetchMessages,
 } from "../Redux/Actions/messageAction";
+import { fetchAllUsers } from "../Redux/Actions/userActions";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.signIn);
   const conversations = useSelector((state) => state.message.conversations);
+  const { users } = useSelector((state) => state.users);
+  console.log("users", users);
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, [dispatch]);
 
   console.log("con", conversations);
   const messages = useSelector((state) => state.message.messages);
@@ -56,7 +62,7 @@ const Dashboard = () => {
                     onClick={() => handleUserClick(conversation.conversationId)}
                   >
                     <img
-                      className="w-[65%] h-[30%] md:w-[20%] md:h-[30%]"
+                      className="w-[65%] h-[30%] md:w-[15%] md:h-[30%]"
                       src={Avatar} // Replace with actual image source
                       alt="logo"
                     />
@@ -74,6 +80,30 @@ const Dashboard = () => {
             ))
           )}
         </div>
+        <div className="text-blue-500">All Users</div>
+        {users.map((user) => (
+          <div
+            key={user.id}
+            className="flex items-center my-8 mr-7 border-b border-b-gray-300"
+          >
+            <div
+              className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]"
+              onClick={() => handleUserClick(user.id)}
+            >
+              <img
+                className="w-[65%] h-[30%] md:w-[15%] md:h-[30%]"
+                src={Avatar} // Replace with actual image source
+                alt="logo"
+              />
+              <div className="ml-4">
+                <h1 className="text-xl font-semibold">{user.fullName}</h1>
+                <h3 className="text-lg font-light text-gray-400">
+                  {user.email}
+                </h3>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="w-[75%] bg-white h-screen  flex flex-col items-center ">
         <div className="w-[100%] md:w-[62%] md:mb-8 rounded-full flex item-center bg-secondary mt-11">

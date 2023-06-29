@@ -1,4 +1,7 @@
 import {
+  FETCH_ALL_USERS_FAILURE,
+  FETCH_ALL_USERS_REQUEST,
+  FETCH_ALL_USERS_SUCCESS,
   USER_SIGNING_FAIL,
   USER_SIGNING_REQUEST,
   USER_SIGNING_RESET,
@@ -47,6 +50,38 @@ export const userReducerSignUp = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case USER_SIGNUP_RESET:
       return {};
+    default:
+      return state;
+  }
+};
+// all users
+// reducer.js
+
+const initialState = {
+  loading: false,
+  error: null,
+};
+
+export const userReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case FETCH_ALL_USERS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+        error: null,
+      };
+    case FETCH_ALL_USERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
+      };
+    case FETCH_ALL_USERS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

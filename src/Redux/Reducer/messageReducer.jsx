@@ -5,6 +5,9 @@ import {
   FETCH_MESSAGES_FAILURE,
   FETCH_MESSAGES_REQUEST,
   FETCH_MESSAGES_SUCCESS,
+  SEND_MESSAGE_FAILURE,
+  SEND_MESSAGE_REQUEST,
+  SEND_MESSAGE_SUCCESS,
 } from "../Constants/userConstants";
 
 const initialState = {
@@ -13,11 +16,30 @@ const initialState = {
   selectedConversationId: null,
   loadingConversations: false,
   loadingMessages: false,
+  sending: false,
   error: null,
 };
 
 const messageReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SEND_MESSAGE_REQUEST:
+      return {
+        ...state,
+        sending: true,
+        error: null,
+      };
+    case SEND_MESSAGE_SUCCESS:
+      return {
+        ...state,
+        sending: false,
+        error: null,
+      };
+    case SEND_MESSAGE_FAILURE:
+      return {
+        ...state,
+        sending: false,
+        error: action.payload,
+      };
     case FETCH_CONVERSATIONS_REQUEST:
       return {
         ...state,

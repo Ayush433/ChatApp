@@ -1,7 +1,11 @@
 import { createStore, combineReducers } from "redux";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
-import { userReducerSignIn, userReducerSignUp } from "./Reducer/userReducer";
+import {
+  userReducerSignIn,
+  userReducerSignUp,
+  userReducer,
+} from "./Reducer/userReducer";
 
 import messageReducer from "./Reducer/messageReducer";
 
@@ -9,6 +13,7 @@ const reducer = combineReducers({
   signIn: userReducerSignIn,
   signUp: userReducerSignUp,
   message: messageReducer,
+  users: userReducer,
 });
 
 //initial state

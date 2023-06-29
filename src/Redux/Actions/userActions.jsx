@@ -1,4 +1,7 @@
 import {
+  FETCH_ALL_USERS_FAILURE,
+  FETCH_ALL_USERS_REQUEST,
+  FETCH_ALL_USERS_SUCCESS,
   USER_SIGNING_FAIL,
   USER_SIGNING_REQUEST,
   USER_SIGNING_SUCCESS,
@@ -45,5 +48,22 @@ export const userSignUpAction = (user) => async (dispatch) => {
       type: USER_SIGNUP_FAIL,
       payload: error.response.data.error,
     });
+  }
+};
+
+// all user
+export const fetchAllUsers = () => async (dispatch) => {
+  try {
+    dispatch({ type: FETCH_ALL_USERS_REQUEST });
+
+    const response = await fetch("http://localhost:4000/api/allUsers");
+    const data = await response.json();
+
+    dispatch({
+      type: FETCH_ALL_USERS_SUCCESS,
+      payload: data.message.user,
+    });
+  } catch (error) {
+    dispatch({ type: FETCH_ALL_USERS_FAILURE, payload: error.message });
   }
 };
