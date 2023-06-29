@@ -13,6 +13,7 @@ import { useState } from "react";
 
 const Dashboard = () => {
   const [newMessage, setNewMessage] = useState("");
+  const [selectedConversationId, setSelectedConversationId] = useState("");
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.signIn);
   const conversations = useSelector((state) => state.message.conversations);
@@ -31,11 +32,13 @@ const Dashboard = () => {
   }, [dispatch, userInfo]);
 
   const handleUserClick = (conversationId) => {
+    setSelectedConversationId(conversationId);
     dispatch(fetchMessages(conversationId));
   };
 
   // api of send Message
-  const handleSendMessage = async (conversationId) => {
+  const handleSendMessage = async () => {
+    const conversationId = selectedConversationId;
     try {
       const response = await fetch("http://localhost:4000/api/message", {
         method: "POST",
@@ -94,7 +97,7 @@ const Dashboard = () => {
                   >
                     <img
                       className="w-[65%] h-[30%] md:w-[15%] md:h-[30%]"
-                      src={Avatar} // Replace with actual image source
+                      src={Avatar}
                       alt="logo"
                     />
                     <div className="ml-4">
@@ -148,9 +151,7 @@ const Dashboard = () => {
             <img src={Avatar} alt="" />
           </div>
           <div className="ml-3 md:ml-6">
-            <h3 className="text-sm mt-2 md:text-lg">
-              {conversations[0]?.user?.fullName}
-            </h3>
+            <h3 className="text-sm mt-2 md:text-lg">{users?.user?.fullName}</h3>
             <p className="text-sm font-light text-green-600">Online</p>
           </div>
           <div className="ml-[40px] mt-4 pr-5 md:ml-[300px] cursor-pointer">

@@ -1,6 +1,7 @@
 import { createStore, combineReducers } from "redux";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
+import { composeWithDevTools } from "@redux-devtools/extension";
 import {
   userReducerSignIn,
   userReducerSignUp,
