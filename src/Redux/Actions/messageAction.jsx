@@ -5,6 +5,9 @@ import {
   FETCH_MESSAGES_FAILURE,
   FETCH_MESSAGES_REQUEST,
   FETCH_MESSAGES_SUCCESS,
+  MESSAGE_CONVERSATION_FAILURE,
+  MESSAGE_CONVERSATION_REQUEST,
+  MESSAGE_CONVERSATION_SUCCESS,
   SEND_MESSAGE_FAILURE,
   SEND_MESSAGE_REQUEST,
   SEND_MESSAGE_SUCCESS,
@@ -38,7 +41,7 @@ export const fetchConversations = (userId) => async (dispatch) => {
   }
 };
 
-export const fetchMessages = (conversationId) => async (dispatch) => {
+export const fetchMessages = (conversationId, user) => async (dispatch) => {
   try {
     dispatch({ type: FETCH_MESSAGES_REQUEST });
 
@@ -58,6 +61,8 @@ export const fetchMessages = (conversationId) => async (dispatch) => {
     dispatch({
       type: FETCH_MESSAGES_SUCCESS,
       payload: data,
+      receiver: user,
+      conversationId,
     });
   } catch (error) {
     dispatch({
@@ -114,3 +119,7 @@ export const fetchMessages = (conversationId) => async (dispatch) => {
 //       );
 //     }
 //   };
+
+// established Connection
+
+//After Connection Established Message Send

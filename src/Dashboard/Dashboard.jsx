@@ -9,8 +9,10 @@ import {
   fetchMessages,
 } from "../Redux/Actions/messageAction";
 import { fetchAllUsers } from "../Redux/Actions/userActions";
+import { useState } from "react";
 
 const Dashboard = () => {
+  const [newMessage, setNewMessage] = useState("");
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.signIn);
   const conversations = useSelector((state) => state.message.conversations);
@@ -30,6 +32,35 @@ const Dashboard = () => {
 
   const handleUserClick = (conversationId) => {
     dispatch(fetchMessages(conversationId));
+  };
+
+  // api of send Message
+  const handleSendMessage = async (conversationId) => {
+    try {
+      const response = await fetch("http://localhost:4000/api/message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          conversationId,
+          senderId: userInfo?.data?.id,
+          message: newMessage,
+        }),
+      });
+
+      if (response.ok) {
+        // Message sent successfully, you can update the messages or fetch updated messages
+        dispatch(fetchMessages(conversationId));
+        setNewMessage("");
+      } else {
+        // Handle error response
+        const data = await response.json();
+        console.log("Error:", data.message);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   return (
@@ -81,29 +112,35 @@ const Dashboard = () => {
           )}
         </div>
         <div className="text-blue-500">All Users</div>
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className="flex items-center my-8 mr-7 border-b border-b-gray-300"
-          >
+        {users && Array.isArray(users) && users.length === 0 ? (
+          <div>No conversations found.</div>
+        ) : (
+          users &&
+          Array.isArray(users) &&
+          users.map((user) => (
             <div
-              className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]"
-              onClick={() => handleUserClick(user.id)}
+              key={user.id}
+              className="flex items-center my-8 mr-7 border-b border-b-gray-300"
             >
-              <img
-                className="w-[65%] h-[30%] md:w-[15%] md:h-[30%]"
-                src={Avatar} // Replace with actual image source
-                alt="logo"
-              />
-              <div className="ml-4">
-                <h1 className="text-xl font-semibold">{user.fullName}</h1>
-                <h3 className="text-lg font-light text-gray-400">
-                  {user.email}
-                </h3>
+              <div
+                className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]"
+                onClick={() => handleUserClick(user.id)}
+              >
+                <img
+                  className="w-[65%] h-[30%] md:w-[15%] md:h-[30%]"
+                  src={Avatar} // Replace with actual image source
+                  alt="logo"
+                />
+                <div className="ml-4">
+                  <h1 className="text-xl font-semibold">{user.fullName}</h1>
+                  <h3 className="text-lg font-light text-gray-400">
+                    {user.email}
+                  </h3>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <div className="w-[75%] bg-white h-screen  flex flex-col items-center ">
         <div className="w-[100%] md:w-[62%] md:mb-8 rounded-full flex item-center bg-secondary mt-11">
@@ -148,9 +185,14 @@ const Dashboard = () => {
         <div className="md:p-14 w-full flex items-center">
           <input
             placeholder="Type a message"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
             className="md:w-[70%]  border-0 p-3 shadow-mg rounded-full bg-light focus:ring-0"
           />
-          <div className=" ml-3 md:ml-[90px] text-blue-600 cursor-pointer">
+          <div
+            className=" ml-3 md:ml-[90px] text-blue-600 cursor-pointer"
+            onClick={() => handleSendMessage(conversations[0]?.conversationId)}
+          >
             <FiSend size={25} />
           </div>
         </div>
