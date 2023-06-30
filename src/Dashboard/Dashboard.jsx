@@ -60,10 +60,11 @@ const Dashboard = () => {
   };
 
   // api of send Message
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (receiverId) => {
     const conversationId = selectedConversationId;
     socket?.emit("sendMessages", {
       conversationId,
+      receiverId,
       senderId: userInfo?.data?.id,
       message: newMessage,
     });
@@ -76,6 +77,7 @@ const Dashboard = () => {
         },
         body: JSON.stringify({
           conversationId,
+          receiverId,
           senderId: userInfo?.data?.id,
           message: newMessage,
         }),
