@@ -1,26 +1,19 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { useState, useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Dashboard from "./Dashboard/Dashboard";
 import RegistrationForm from "./Pages/RegistrationForm";
 import SignInForm from "./Pages/SignInForm";
-import {
-  Navigate,
-  redirect,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
-import Dashboard from "./Dashboard/Dashboard";
 
 function App() {
   const [count, setCount] = useState(0);
-  const nav = useNavigate();
-  // const ProtectedRoute = ({ children }) => {
-  //   const isLogin = localStorage.getItem("user:Toke") !== null;
-  //   if (!isLogin) nav("/signIn");
-  //   return children;
-  // };
+  const navigate = useNavigate();
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/signIn"); // Redirect to signIn if userInfo is not available
+    }
+  }, [navigate, userInfo]);
 
   return (
     <>
@@ -28,7 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/signUp" element={<RegistrationForm />} />
-          <Route path="signIn" element={<SignInForm />} />
+          <Route path="/signIn" element={<SignInForm />} />
         </Routes>
       </h1>
     </>

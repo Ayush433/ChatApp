@@ -10,15 +10,38 @@ import {
 } from "../Redux/Actions/messageAction";
 import { fetchAllUsers } from "../Redux/Actions/userActions";
 import { useState } from "react";
+import { io } from "socket.io-client";
 
 const Dashboard = () => {
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState([]);
+  console.log();
+  // const [user, setUser] = useState(
+  //   JSON.parse(localStorage.getItem("userInfo"))
+  // );
   const [selectedConversationId, setSelectedConversationId] = useState("");
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.signIn);
   const conversations = useSelector((state) => state.message.conversations);
   const { users } = useSelector((state) => state.users);
   console.log("users", users);
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    setSocket(io("http://localhost:4040"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("addUser", userInfo?.data?.id);
+    socket?.on("getUser", (users) => {
+      console.log("activeUsers", users);
+    });
+    socket?.on("getMessage", (data) => {
+      console.log(data);
+      setNewMessage((prev) => [...prev, { userInfo, message: data.message }]);
+    });
+
+    // ...
+  }, [socket]);
+
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
@@ -39,6 +62,12 @@ const Dashboard = () => {
   // api of send Message
   const handleSendMessage = async () => {
     const conversationId = selectedConversationId;
+    socket?.emit("sendMessages", {
+      conversationId,
+      senderId: userInfo?.data?.id,
+      message: newMessage,
+    });
+
     try {
       const response = await fetch("http://localhost:4000/api/message", {
         method: "POST",
@@ -147,6 +176,7 @@ const Dashboard = () => {
       </div>
       <div className="w-[75%] bg-white h-screen  flex flex-col items-center ">
         <div className="w-[100%] md:w-[62%] md:mb-8 rounded-full flex item-center bg-secondary mt-11">
+          {messages?.user?.fullName}
           <div className="w-[30%] h-[20%] md:w-[10%] md:ml-10 cursor-pointer">
             <img src={Avatar} alt="" />
           </div>
@@ -160,17 +190,23 @@ const Dashboard = () => {
         </div>
         <div className="h-[75%] border w-full overflow-y-auto">
           <div className="h-[1000px] md:px-10 py-14 px-2 overflow-hidden">
-            {messages.length ? (
-              messages.map(({ message, user: { id } = {} } = {}) => {
+            {messages?.length ? (
+              messages.map(({ message, user: { id } = {} } = {}, index) => {
                 if (id === userInfo?.data?.id) {
                   return (
-                    <div className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl p-4 mb-4">
+                    <div
+                      key={index}
+                      className="w-[200px] md:w-[300px] md:h-[80px] bg-primary rounded-b-xl rounded-tr-xl p-4 mb-4"
+                    >
                       <p className="text-white">{message}</p>
                     </div>
                   );
                 } else {
                   return (
-                    <div className="w-[200px] md:w-[300px] md:h-[80px] bg-secondary rounded-b-xl rounded-tr-xl ml-auto text-white p-4">
+                    <div
+                      key={index}
+                      className="w-[200px] md:w-[300px] md:h-[80px] bg-secondary rounded-b-xl rounded-tr-xl ml-auto text-white p-4"
+                    >
                       <p className="text-black">{message}</p>
                     </div>
                   );
