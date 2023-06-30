@@ -36,7 +36,10 @@ const Dashboard = () => {
     });
     socket?.on("getMessage", (data) => {
       console.log(data);
-      setNewMessage((prev) => [...prev, { userInfo, message: data.message }]);
+      setNewMessage((prev) => [
+        ...prev.messages,
+        { userInfo, message: data.message },
+      ]);
     });
 
     // ...
@@ -54,9 +57,9 @@ const Dashboard = () => {
     dispatch(fetchConversations(userInfo?.data?.id));
   }, [dispatch, userInfo]);
 
-  const handleUserClick = (conversationId) => {
-    setSelectedConversationId(conversationId);
-    dispatch(fetchMessages(conversationId));
+  const handleUserClick = (receiverId) => {
+    setSelectedConversationId(receiverId);
+    dispatch(fetchMessages(receiverId));
   };
 
   // api of send Message
@@ -158,7 +161,7 @@ const Dashboard = () => {
             >
               <div
                 className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]"
-                onClick={() => handleUserClick(user.id)}
+                onClick={() => handleUserClick("new", user.id)}
               >
                 <img
                   className="w-[65%] h-[30%] md:w-[15%] md:h-[30%]"
