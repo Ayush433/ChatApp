@@ -19,6 +19,7 @@ const Dashboard = () => {
   //   JSON.parse(localStorage.getItem("userInfo"))
   // );
   const [selectedConversationId, setSelectedConversationId] = useState("");
+
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.signIn);
   const conversations = useSelector((state) => state.message.conversations);
@@ -57,14 +58,109 @@ const Dashboard = () => {
     dispatch(fetchConversations(userInfo?.data?.id));
   }, [dispatch, userInfo]);
 
-  const handleUserClick = (receiverId) => {
-    setSelectedConversationId(receiverId);
-    dispatch(fetchMessages(receiverId));
+  const handleUserClick = async (conversationId, receiverId) => {
+    setSelectedConversationId(conversationId);
+    if (conversationId === "new") {
+      try {
+        const response = await fetch("http://localhost:4000/api/conversation", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            receiverId,
+            senderId: userInfo?.data?.id,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const newConversationId = data.newMessage.conversationId;
+          setSelectedConversationId(newConversationId);
+          dispatch(fetchMessages(newConversationId));
+        } else {
+          const data = await response.json();
+          console.log("Error:", data.message);
+          return;
+        }
+      } catch (error) {
+        console.log("Error:", error);
+        return;
+      }
+    } else {
+      dispatch(fetchMessages(conversationId));
+    }
   };
 
   // api of send Message
+
+  // const handleSendMessage = async (receiverId) => {
+  //   let conversationId = selectedConversationId;
+  //   if (conversationId === "new") {
+  //     try {
+  //       const response = await fetch("http://localhost:4000/api/conversation", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           receiverId,
+  //           senderId: userInfo?.data?.id,
+  //         }),
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         conversationId = data.newMessage.conversationId;
+  //       } else {
+  //         const data = await response.json();
+  //         console.log("Error:", data.message);
+  //         return;
+  //       }
+  //     } catch (error) {
+  //       console.log("Error:", error);
+  //       return;
+  //     }
+  //   }
+
+  //   socket?.emit("sendMessages", {
+  //     conversationId,
+  //     receiverId,
+  //     senderId: userInfo?.data?.id,
+  //     message: newMessage,
+  //   });
+
+  //   try {
+  //     const response = await fetch("http://localhost:4000/api/message", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         conversationId,
+  //         receiverId,
+  //         senderId: userInfo?.data?.id,
+  //         message: newMessage,
+  //       }),
+  //     });
+
+  //     if (response.ok) {
+  //       // Message sent successfully, you can update the messages or fetch updated messages
+  //       dispatch(fetchMessages(conversationId));
+  //       setNewMessage("");
+  //     } else {
+  //       // Handle error response
+  //       const data = await response.json();
+  //       console.log("Error:", data.message);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error:", error);
+  //   }
+  // };
+
   const handleSendMessage = async (receiverId) => {
     const conversationId = selectedConversationId;
+
     socket?.emit("sendMessages", {
       conversationId,
       receiverId,
