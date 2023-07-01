@@ -1,30 +1,52 @@
-import { useState, useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Dashboard from "./Dashboard/Dashboard";
-import RegistrationForm from "./Pages/RegistrationForm";
-import SignInForm from "./Pages/SignInForm";
+import "./App.css";
+import Form from "./Modules/Form";
+import Dashboard from "./Modules/Dashboard";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+const ProtectedRoute = ({ children, auth = false }) => {
+  const isLoggedIn = localStorage.getItem("user:token") !== null || false;
+
+  if (!isLoggedIn && auth) {
+    return <Navigate to={"/users/sign_in"} />;
+  } else if (
+    isLoggedIn &&
+    ["/users/sign_in", "/users/sign_up"].includes(window.location.pathname)
+  ) {
+    console.log("object :>> ");
+    return <Navigate to={"/"} />;
+  }
+
+  return children;
+};
 
 function App() {
-  const [count, setCount] = useState(0);
-  const navigate = useNavigate();
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-
-  useEffect(() => {
-    if (!userInfo) {
-      navigate("/signIn"); // Redirect to signIn if userInfo is not available
-    }
-  }, [navigate, userInfo]);
-
   return (
-    <>
-      <h1 className="bg-[#e1edff] h-screen flex justify-center items-center">
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/signUp" element={<RegistrationForm />} />
-          <Route path="/signIn" element={<SignInForm />} />
-        </Routes>
-      </h1>
-    </>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute auth={true}>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users/sign_in"
+        element={
+          <ProtectedRoute>
+            <Form isSignInPage={true} />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users/sign_up"
+        element={
+          <ProtectedRoute>
+            <Form isSignInPage={false} />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 
