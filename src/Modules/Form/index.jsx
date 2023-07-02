@@ -18,9 +18,7 @@ const Form = ({ isSignInPage = true }) => {
     console.log("data :>> ", data);
     e.preventDefault();
     const res = await fetch(
-      `https://chatapp-gj54.onrender.com/api/${
-        isSignInPage ? "login" : "register"
-      }`,
+      `http://localhost:4000/api/${isSignInPage ? "login" : "register"}`,
       {
         method: "POST",
         headers: {

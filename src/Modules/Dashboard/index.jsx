@@ -17,7 +17,7 @@ const Dashboard = () => {
   console.log("conversatation", conversations);
 
   useEffect(() => {
-    setSocket(io("https://chatapp-gj54.onrender.com/"));
+    setSocket(io("http://localhost:8080"));
   }, []);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Dashboard = () => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
     const fetchConversations = async () => {
       const res = await fetch(
-        `https://chatapp-gj54.onrender.com/api/conversations/${loggedInUser?.id}`,
+        `http://localhost:8001/api/conversations/${loggedInUser?.id}`,
         {
           method: "GET",
           headers: {
@@ -62,15 +62,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch(
-        `https://chatapp-gj54.onrender.com/api/users/${user?.id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await fetch(`http://localhost:8001/api/users/${user?.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const resData = await res.json();
       setUsers(resData);
     };
@@ -79,7 +76,7 @@ const Dashboard = () => {
 
   const fetchMessages = async (conversationId, receiver) => {
     const res = await fetch(
-      `https://chatapp-gj54.onrender.com/api/message/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`,
+      `http://localhost:8001/api/message/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`,
       {
         method: "GET",
         headers: {
@@ -99,7 +96,7 @@ const Dashboard = () => {
       message,
       conversationId: messages?.conversationId,
     });
-    const res = await fetch(`https://chatapp-gj54.onrender.com/api/message`, {
+    const res = await fetch(`http://localhost:8001/api/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
