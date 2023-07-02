@@ -1,7 +1,10 @@
 import "./App.css";
 import Form from "./Modules/Form";
 import Dashboard from "./Modules/Dashboard";
+import { toast } from "react-toastify";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProtectedRoute = ({ children, auth = false }) => {
   const isLoggedIn = localStorage.getItem("user:token") !== null || false;
@@ -21,32 +24,35 @@ const ProtectedRoute = ({ children, auth = false }) => {
 
 function App() {
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute auth={true}>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users/sign_in"
-        element={
-          <ProtectedRoute>
-            <Form isSignInPage={true} />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users/sign_up"
-        element={
-          <ProtectedRoute>
-            <Form isSignInPage={false} />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+    <div>
+      <ToastContainer autoClose={1000} position="top-right" />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute auth={true}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/sign_in"
+          element={
+            <ProtectedRoute>
+              <Form isSignInPage={true} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/sign_up"
+          element={
+            <ProtectedRoute>
+              <Form isSignInPage={false} />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </div>
   );
 }
 

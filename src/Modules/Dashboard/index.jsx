@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Img1 from "../../assets/image.png";
 import Input from "../../Components/Input";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user:detail"))
+    JSON.parse(localStorage.getItem("user:detail")) || {}
   );
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState({});
@@ -13,6 +14,7 @@ const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const [socket, setSocket] = useState(null);
   const messageRef = useRef(null);
+  console.log("conversatation", conversations);
 
   useEffect(() => {
     setSocket(io("http://localhost:8080"));
@@ -44,7 +46,7 @@ const Dashboard = () => {
     const loggedInUser = JSON.parse(localStorage.getItem("user:detail"));
     const fetchConversations = async () => {
       const res = await fetch(
-        `http://localhost:8001/api/conversations/${loggedInUser?.id}`,
+        `https://chatapp-gj54.onrender.com/api/conversations/${loggedInUser?.id}`,
         {
           method: "GET",
           headers: {
@@ -60,12 +62,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch(`http://localhost:8001/api/users/${user?.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `https://chatapp-gj54.onrender.com/api/users/${user?.id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const resData = await res.json();
       setUsers(resData);
     };
@@ -74,7 +79,7 @@ const Dashboard = () => {
 
   const fetchMessages = async (conversationId, receiver) => {
     const res = await fetch(
-      `http://localhost:8001/api/message/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`,
+      `https://chatapp-gj54.onrender.com/api/message/${conversationId}?senderId=${user?.id}&&receiverId=${receiver?.receiverId}`,
       {
         method: "GET",
         headers: {
@@ -94,7 +99,7 @@ const Dashboard = () => {
       message,
       conversationId: messages?.conversationId,
     });
-    const res = await fetch(`http://localhost:8001/api/message`, {
+    const res = await fetch(`https://chatapp-gj54.onrender.com/api/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -106,6 +111,11 @@ const Dashboard = () => {
         receiverId: messages?.receiver?.receiverId,
       }),
     });
+  };
+  const logout = () => {
+    localStorage.removeItem("user:detail");
+    localStorage.removeItem("user:token");
+    window.location.reload();
   };
 
   return (
@@ -196,13 +206,19 @@ const Dashboard = () => {
               No Conversations
             </div>
           )}
+          <button
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-[100%] h-full mb-5 md:w-[70%] md:ml-9"
+            onClick={logout}
+          >
+            LogOut
+          </button>
         </div>
       </div>
       <div className="w-[70%] h-screen bg-white flex flex-col items-center">
         {messages?.receiver?.fullName && (
           <div className="w-[75%] bg-secondary h-[80px] my-14 rounded-full flex items-center px-14 py-2">
             <div className="cursor-pointer w-[100%] h-[100%] md:w-[20%] md:ml-10">
-              <img src={Img1} width={30} height={20} className="rounded-full" />
+              <img src={Img1} width={60} height={20} className="rounded-full" />
             </div>
             <div className="">
               <h3 className="text-sm mt-2 md:text-lg">

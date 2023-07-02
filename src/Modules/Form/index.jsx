@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../Components/Button";
 import Input from "../../Components/Input";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Form = ({ isSignInPage = true }) => {
   const [data, setData] = useState({
@@ -13,11 +14,13 @@ const Form = ({ isSignInPage = true }) => {
   });
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, action) => {
     console.log("data :>> ", data);
     e.preventDefault();
     const res = await fetch(
-      `http://localhost:8001/api/${isSignInPage ? "login" : "register"}`,
+      `https://chatapp-gj54.onrender.com/api/${
+        isSignInPage ? "login" : "register"
+      }`,
       {
         method: "POST",
         headers: {
@@ -28,13 +31,16 @@ const Form = ({ isSignInPage = true }) => {
     );
 
     if (res.status === 400) {
-      alert("Invalid credentials");
+      // alert("Invalid credentials");
+      toast.error("Email and password Incorrect ");
+      action.reset();
     } else {
       const resData = await res.json();
       if (resData.token) {
         localStorage.setItem("user:token", resData.token);
         localStorage.setItem("user:detail", JSON.stringify(resData.user));
         navigate("/");
+        toast.success("Login Successful");
       }
     }
   };
