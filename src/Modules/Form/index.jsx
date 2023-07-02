@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Button from "../../Components/Button";
-import Input from "../../Components/Input";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -14,7 +14,7 @@ const Form = ({ isSignInPage = true }) => {
   });
   const navigate = useNavigate();
 
-  const handleSubmit = async (e, action) => {
+  const handleSubmit = async (e) => {
     console.log("data :>> ", data);
     e.preventDefault();
     const res = await fetch(
@@ -29,16 +29,14 @@ const Form = ({ isSignInPage = true }) => {
     );
 
     if (res.status === 400) {
-      // alert("Invalid credentials");
-      toast.error("Email and password Incorrect ");
-      action.reset();
+      toast.error("Please Check you Email and Password");
     } else {
       const resData = await res.json();
       if (resData.token) {
         localStorage.setItem("user:token", resData.token);
         localStorage.setItem("user:detail", JSON.stringify(resData.user));
         navigate("/");
-        toast.success("Login Successful");
+        toast.success("Login SuccessFul");
       }
     }
   };

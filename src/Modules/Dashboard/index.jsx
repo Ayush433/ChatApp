@@ -117,10 +117,10 @@ const Dashboard = () => {
 
   return (
     <div className="w-screen flex">
-      <div className="w-[30%] h-screen bg-secondary overflow-scroll md:w-[25%]">
+      <div className="w-[25%] h-screen bg-secondary overflow-scroll md:w-[25%]">
         <div className="flex items-center my-5 flex-col md:flex-row">
           <img
-            src=""
+            src={Img1}
             width={55}
             height={55}
             className="w-[75%] h-[20%] md:w-[20%] md:h-[20%] md:flex-row md:ml-[40px]"
@@ -140,22 +140,22 @@ const Dashboard = () => {
             {conversations.length > 0 ? (
               conversations.map(({ conversationId, user }) => {
                 return (
-                  <div className="flex items-center my-8 mr-7 border-b border-b-gray-300">
+                  <div className="flex items-center my-8 mr-9  border-b border-b-gray-300">
                     <div
                       className="cursor-pointer flex items-center flex-col md:flex-row md:mb-[20px]"
                       onClick={() => fetchMessages(conversationId, user)}
                     >
-                      <div>
+                      <div className="">
                         <img
                           src={Img1}
-                          className="w-[65%] h-[30%] md:w-[15%] md:h-[30%] rounded-full"
+                          className="w-[45%] h-[30%] md:w-[40%] md:h-[40%] rounded-full"
                         />
                       </div>
-                      <div className="ml-4">
-                        <h3 className="text-lg font-semibold">
+                      <div className="md:mr-[20px] md:p-[4]">
+                        <h3 className="text-md font-semibold">
                           {user?.fullName}
                         </h3>
-                        <p className="text-sm font-light text-gray-600">
+                        <p className="text-sm font-light text-gray-600 mr-9">
                           {user?.email}
                         </p>
                       </div>
@@ -186,11 +186,11 @@ const Dashboard = () => {
                         className="w-[65%] h-[30%] md:w-[45%] md:h-[40%] rounded-full"
                       />
                     </div>
-                    <div className="ml-4 md:mr-[90px]">
-                      <h3 className="text-lg font-semibold ">
+                    <div className="md:mr-[108px]">
+                      <h3 className="text-lg font-semibold  md:m">
                         {user?.fullName}
                       </h3>
-                      <p className="text-sm font-light text-gray-600">
+                      <p className="text-[10px] font-light text-gray-600">
                         {user?.email}
                       </p>
                     </div>
@@ -211,7 +211,7 @@ const Dashboard = () => {
           </button>
         </div>
       </div>
-      <div className="w-[70%] h-screen bg-white flex flex-col items-center">
+      <div className="w-[75%] h-screen bg-white flex flex-col items-center">
         {messages?.receiver?.fullName && (
           <div className="w-[75%] bg-secondary h-[80px] my-14 rounded-full flex items-center px-14 py-2">
             <div className="cursor-pointer w-[100%] h-[100%] md:w-[20%] md:ml-10">
@@ -225,7 +225,7 @@ const Dashboard = () => {
                 {messages?.receiver?.email}
               </p>
             </div>
-            <div className="cursor-pointer">
+            <div className="cursor-pointer ml-[60px]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-phone-outgoing"
