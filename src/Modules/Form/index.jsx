@@ -18,7 +18,7 @@ const Form = ({ isSignInPage = true }) => {
     console.log("data :>> ", data);
     e.preventDefault();
     const res = await fetch(
-      `http://localhost:4000/api/${isSignInPage ? "login" : "register"}`,
+      `http://localhost:8001/api/${isSignInPage ? "login" : "register"}`,
       {
         method: "POST",
         headers: {
