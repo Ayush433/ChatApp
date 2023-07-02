@@ -114,6 +114,9 @@ const Dashboard = () => {
     localStorage.removeItem("user:token");
     window.location.reload();
   };
+  const handleClick = () => {
+    window.open("https://meet.google.com/?pli=1");
+  };
 
   return (
     <div className="w-screen flex">
@@ -225,7 +228,7 @@ const Dashboard = () => {
                 {messages?.receiver?.email}
               </p>
             </div>
-            <div className="cursor-pointer ml-[60px]">
+            <div className="cursor-pointer ml-[60px]" onClick={handleClick}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-phone-outgoing"
