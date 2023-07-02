@@ -17,7 +17,7 @@ const Dashboard = () => {
   console.log("conversatation", conversations);
 
   useEffect(() => {
-    setSocket(io("http://localhost:8080"));
+    setSocket(io("https://chatapp-gj54.onrender.com/"));
   }, []);
 
   useEffect(() => {
